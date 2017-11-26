@@ -10,6 +10,14 @@ from PIL import ImageTk, Image
 import sys
 import random
 
+
+#The code is composed of several functions for windows like Menu(), how(),getback(), play() and classes for different objects
+#to maintain simplicity such as spaceship() for the player, birdS(), EGG(), Boss()
+#
+#
+
+
+
 #___________________________________________________________________________________________________________
 #MAIN MENU WINDOW
 
@@ -198,24 +206,17 @@ class birds(pygame.sprite.Sprite):
         self.surface.blit(self.image, self.rect)
         if self.rect.x < 920:
             self.image = self.moving
-           # self.rect.x = self.rect.x - self.dist
             self.counter = self.counter + 1
             if self.counter%4 == 0:
                 self.image = self.static
 
         elif self.rect.x <= 0:
-            self.rect.x = self.rect.x + self.dist
             if self.rect.x < 920:
                 self.image = self.moving
-                #self.rect.x = self.rect.x + self.dist
                 self.counter = self.counter + 1
                     
     def update(self):
-        #if self.origX > self.rect.x:
-            #self.image = self.moving
-        #elif self.origX > self.rect.x:
-            #self.image = self.static
-            
+        #if the bird is dead, move outside
         if self.dead == True:
             self.rect.x = 4000
             self.rect.y = 4000
@@ -262,7 +263,7 @@ class EGG(pygame.sprite.Sprite):
 class Boss(pygame.sprite.Sprite):
     def __init__(self,screen,x,y):
         pygame.sprite.Sprite.__init__(self)
-        #load the picture of the boss
+        #load the picture of the boss in active and static status
         self.image = pygame.image.load("Images/boss_static.png").convert_alpha()
         self.moving = pygame.image.load("Images/boss_active.png").convert_alpha()
         self.static = pygame.image.load("Images/boss_static.png").convert_alpha()
@@ -274,11 +275,11 @@ class Boss(pygame.sprite.Sprite):
         self.rect.y = y
         self.origX = x
         self.origY = y
-        self.newX = self.dist
-        self.newY = self.dist
         self.surface = screen
         self.dead = False
+        #for the movement of wings
         self.counter = 0
+        #boss health
         self.HP = 0
 
     #draws the object on screen
@@ -291,7 +292,9 @@ class Boss(pygame.sprite.Sprite):
                 self.image = self.static
                     
     def update(self):
+        #if hp is = 10, means he is dead
         if self.HP == 10:
+            #move out of screen
             self.dead = True
             self.rect.x = 4000
             self.rect.y = 4000
@@ -316,9 +319,7 @@ def play(close):
     status = LIVE
     current_Score = 0
     level = 1
-    #Score = shelve.open('score.txt')
     cSText = pygame.font.SysFont('Arial Black',20).render(('Current Score: '+str(current_Score)), True, pygame.color.Color('White'))
-    #hSText = pygame.font.SysFont('Arial Black',20).render(('High Score: '+str(current_Score)), True, pygame.color.Color('White'))
     level_Text = pygame.font.SysFont('Arial Black', 50).render('LEVEL 1', True, pygame.color.Color('Red'))
     game_over_Text = pygame.font.SysFont('Arial Black', 20).render('GAME OVER', True, pygame.color.Color('Red'))
     winText = pygame.font.SysFont('Arial Black', 50).render('YOU WON!', True, pygame.color.Color('Green'))
@@ -428,12 +429,13 @@ def play(close):
                5:[[Boss(screen,400,50)],0]}
 
 
-
+    #backups and lists
     lasers_list = []
     eggs_list = []
     birds_list = levels[1][0]
     killed_birds = levels1[1][0]
     killed_birds1 = levels2[1][0]
+    killed_birds2 = levels3[1][0]
     #-------------------------------------------------------------------------------
 
     #-------------------------------------------------------------------------------
@@ -513,12 +515,15 @@ def play(close):
                     #if player has lives remaining, restart the level
                     if player.lives!=0:
 
+                        #reset timer
                         TIMER = 1000 + level*500
                         TIMER_Text = pygame.font.SysFont('Arial Black', 50).render('TIMER'+str(TIMER), True, pygame.color.Color('Red'))
+                        #reset score
                         current_Score = 0
                         cSText = pygame.font.SysFont('Arial Black', 20).render(('Current Score: '+str(current_Score)), True, pygame.color.Color('White'))
                         screen.blit(background,(0,0))
                         screen.blit(cSText,(0,0))
+                        #reset player position
                         player.rect.x = 450
                         player.rect.y = 600
                         level_Text = pygame.font.SysFont('Arial Black', 50).render('LEVEL '+str(level), True, pygame.color.Color('Red')) 
@@ -528,6 +533,7 @@ def play(close):
                         pygame.display.update()
                         pygame.time.delay(4000)
 
+                #if timer is lower than 0, then it time ran out
                 if TIMER <= 0:
                     player.lives = player.lives - 1
                     eggs_list = []
@@ -535,12 +541,15 @@ def play(close):
                     #if player has lives remaining, restart the level
                     if player.lives!=0:
 
+                        #reset timer
                         TIMER = 1000 + level*500
                         TIMER_Text = pygame.font.SysFont('Arial Black', 50).render('TIMER'+str(TIMER), True, pygame.color.Color('Red'))
+                        #reset score
                         current_Score = 0
                         cSText = pygame.font.SysFont('Arial Black', 20).render(('Current Score: '+str(current_Score)), True, pygame.color.Color('White'))
                         screen.blit(background,(0,0))
                         screen.blit(cSText,(0,0))
+                        #reset player position
                         player.rect.x = 450
                         player.rect.y = 600
                         level_Text = pygame.font.SysFont('Arial Black', 50).render('LEVEL '+str(level), True, pygame.color.Color('Red')) 
@@ -550,6 +559,7 @@ def play(close):
                         pygame.display.update()
                         pygame.time.delay(4000)
 
+                        #keep backups updated and update birds positions
                         if levels1[level][1] != 1:
                             birds_list = killed_birds
 
@@ -565,9 +575,18 @@ def play(close):
                                 j.rect.x=j.origX
                                 j.rect.y=j.origY
                             levels2[level][1]=1
-                            
-                    if player.lives == 0:
 
+                        elif levels3[level][1]!=1:
+                            birds_list = killed_birds2
+                            for j in birds_list:
+                                j.rect.x=j.origX
+                                j.rect.y=j.origY
+                            levels3[level][1]=1
+                            levels = levels3
+                            
+                    #if player has no more lives
+                    if player.lives == 0:
+                        #quit
                         game_over_Text = pygame.font.SysFont('Arial Black', 20).render('GAME OVER', True, pygame.color.Color('White'))
                         screen.blit(game_over_Text,(430,350))
                         pygame.quit()
@@ -581,55 +600,61 @@ def play(close):
 
             #initialize birds
             for i in birds_list:
-
                 i.draw()
 
                 if i.dead == True:
                     birds_list.remove(i)
-                    
+
+            #for every time the timer%50 == 0, add an egg
             if TIMER%50 == 0:
-
+                #if there are birds
                 if birds_list != []:
-
+                    #if no eggs on the screen
                     if eggs_list == []:
-
+                        #choose a random bird
                         c = int(random.choice(range(0,len(levels[level][0]))))
+                        #throw an egg from that bird                            
                         q = EGG(screen,levels[level][0][c].rect.x+20,levels[level][0][c].rect.y+20)
 
+                        #if its level 5, make eggs bigger
                         if level == 5:
-
+                            #get a random x,y position as long as it is inside of bird
                             randomX_position = random.choice(range(levels[level][0][0].rect.x,levels[level][0][0].rect.x+200,10))
                             randomY_position = random.choice(range(levels[level][0][0].rect.y,levels[level][0][0].rect.y+200,10))
                             q = EGG(screen,randomX_position,randomY_position)
                             q.image = pygame.image.load("Images/big_egg.png").convert_alpha()
-
+                        #increase speed of eggs according to each level
                         q.dist = q.dist + level*3
                         eggs_list = eggs_list + [q]
                     
-
+            #handles eggs movement
             for egg in eggs_list:
-
                 if birds_list != []:
                     egg.draw()
-
+                    #if egg is out of the screen, remove from list
                     if egg.OutOfRange == True:
                         eggs_list.remove(egg) 
             #------------------------------------------------------------------------
 
             for bird in birds_list:  
-
+                #for each bird check if it collides with player
                 if pygame.sprite.collide_rect(player,bird):
+                    #if a collision happen, player loses a life
                     player.lives = player.lives - 1
                     eggs_list = []
 
                     #if player has lives remaining, restart the level
                     if player.lives!=0:
+                        lasers_list = []
+                        #reset timer
                         TIMER = 1000 + level*500
                         TIMER_Text = pygame.font.SysFont('Arial Black', 50).render('TIMER'+str(TIMER), True, pygame.color.Color('Red'))
+                        #reset score
                         current_Score = 0
                         cSText = pygame.font.SysFont('Arial Black', 20).render(('Current Score: '+str(current_Score)), True, pygame.color.Color('White'))
                         screen.blit(background,(0,0))
                         screen.blit(cSText,(0,0))
+                        #reset player position
                         player.rect.x = 450
                         player.rect.y = 600
                         level_Text = pygame.font.SysFont('Arial Black', 50).render('LEVEL '+str(level), True, pygame.color.Color('White')) 
@@ -637,18 +662,23 @@ def play(close):
                         pygame.display.update()
                         pygame.time.delay(4000)
 
+                #if time runs out
                 if TIMER <= 0:
                     player.lives = player.lives - 1
                     eggs_list = []
 
                     #if player has lives remaining, restart the level
                     if player.lives!=0:
+                        lasers_list = []
+                        #reset timer
                         TIMER = 1000 + level*500
                         TIMER_Text = pygame.font.SysFont('Arial Black', 50).render('TIMER'+str(TIMER), True, pygame.color.Color('Red'))
+                        #reset score
                         current_Score = 0
                         cSText = pygame.font.SysFont('Arial Black', 20).render(('Current Score: '+str(current_Score)), True, pygame.color.Color('White'))
                         screen.blit(background,(0,0))
                         screen.blit(cSText,(0,0))
+                        #reset player position
                         player.rect.x = 450
                         player.rect.y = 600
                         level_Text = pygame.font.SysFont('Arial Black', 50).render('LEVEL '+str(level), True, pygame.color.Color('White')) 
@@ -656,6 +686,7 @@ def play(close):
                         pygame.display.update()
                         pygame.time.delay(4000)
 
+                        #update backups and birds
                         if levels1[level][1] != 1:
                             birds_list = killed_birds
 
@@ -671,7 +702,17 @@ def play(close):
                                 j.rect.x = j.origX
                                 j.rect.y = j.origY
                             levels2[level][1]=1
-                            
+
+                        elif levels3[level][1]!=1:
+                            birds_list = killed_birds2
+                            for j in birds_list:
+                                j.rect.x=j.origX
+                                j.rect.y=j.origY
+                            levels3[level][1]=1
+                            levels = levels3
+                        
+
+                    #if player has no lives, quit
                     if player.lives == 0:
 
                         game_over_Text = pygame.font.SysFont('Arial Black', 20).render('GAME OVER', True, pygame.color.Color('White'))
@@ -691,21 +732,22 @@ def play(close):
                 for i in lasers_list:
 
                         if pygame.sprite.collide_rect(bird,i):
-                            #make the condition true so you can remove the object
+                            #make the condition true so you can remove the object and laser
                             bird.dead = True
                             lasers_list.remove(i)
                             birds_list.remove(bird)
                             killed_birds.append(bird)
+                            #add 1 to the score
                             current_Score = current_Score + 1
                             cSText = pygame.font.SysFont('Arial Black', 20).render(('Current Score: '+str(current_Score)), True, pygame.color.Color('White'))
                             screen.blit(cSText,(0,0))
-
-
+            
+            #update eggs
             for egg in eggs_list:
 
                 if birds_list != []:
                     egg.draw()
-
+        
                     if egg.OutOfRange == True:
                         eggs_list.remove(egg)
                     egg.update()
@@ -714,6 +756,7 @@ def play(close):
                     
             for egg in eggs_list:
 
+                #check for collision between player and egg
                 if pygame.sprite.collide_rect(player,egg):
                     #make the condition true so you can remove the object
                     egg.OutOfRange = True
@@ -721,13 +764,16 @@ def play(close):
                     player.lives = player.lives - 1
 
                     if player.lives!=0:
-
+                        lasers_list = []
+                        #reset timer
                         TIMER = 1000 + level*500
                         TIMER_Text = pygame.font.SysFont('Arial Black', 50).render('TIMER'+str(TIMER), True, pygame.color.Color('Red'))
+                        #reset score
                         current_Score = 0
                         cSText = pygame.font.SysFont('Arial Black', 20).render(('Current Score: '+str(current_Score)), True, pygame.color.Color('White'))
                         screen.blit(background,(0,0))
                         screen.blit(cSText,(0,0))
+                        #reset player position
                         player.rect.x = 450
                         player.rect.y = 600
                         level_Text = pygame.font.SysFont('Arial Black', 50).render('LEVEL '+str(level), True, pygame.color.Color('White')) 
@@ -735,6 +781,7 @@ def play(close):
                         pygame.display.update()
                         pygame.time.delay(4000)
 
+                        #update backups and birds
                         if levels1[level][1]!=1:
                             birds_list = killed_birds
 
@@ -753,7 +800,17 @@ def play(close):
                                 j.rect.y=j.origY
                             levels2[level][1]=1
                             levels = levels2
-                        
+
+                        elif levels3[level][1]!=1:
+                            birds_list = killed_birds2
+                            for j in birds_list:
+                                j.rect.x=j.origX
+                                j.rect.y=j.origY
+                            levels3[level][1]=1
+                            levels = levels3
+
+
+                    #if player has no lives left, quit
                     if player.lives == 0:
                         game_over_Text = pygame.font.SysFont('Arial Black', 20).render('GAME OVER', True, pygame.color.Color('White'))
                         screen.blit(game_over_Text,(0,0))
@@ -762,20 +819,19 @@ def play(close):
                 
                 
 
-
+            #if birds list is empty, that means a level is over
             if birds_list == []:
-            #checking if game is completed or not
 
+                #if this was level 5, then you won
                 if level==5:
-                    #high=Score['highscoreSE']
                     screen.blit(winText,(400,350))
                     pygame.display.update()
                     pygame.time.delay(4000)
                     pygame.quit()
                     Menu()
-                    #mainMenu(highSE1=high)
                     game_over = 1
 
+                #if it was level 4, then load the boss
                 if level == 4:
                     eggs_list = []
                     screen.blit(background,(0,0))
@@ -797,6 +853,7 @@ def play(close):
                     killed_birds = levels1[level][0]
                     killed_birds1 = levels2[level][0]
 
+                #else, keep going with the lists you got
                 if level == 1 or level == 2 or level == 3:
                     eggs_list = []
                     screen.blit(background,(0,0))
@@ -821,13 +878,14 @@ def play(close):
             curScore_text = pygame.font.SysFont('Arial Black', 20).render(('Current Score: '+str(current_Score)), True, pygame.color.Color('White'))
             screen.blit(cSText,(0,0))
 
-        
+            #if statement for timer, keep decreasing until it's less than 0
             if TIMER >= 0:
                 TIMER = TIMER - 3
                                 
             TIMER_Text = pygame.font.SysFont('Arial Black', 20).render('TIMER: '+ str(TIMER), True, pygame.color.Color('White'))
             screen.blit(TIMER_Text,(880,0))
-            
+
+            #update everything
             pygame.display.flip()
             clock.tick(60)
 #___________________________________________________________________________________________________________
