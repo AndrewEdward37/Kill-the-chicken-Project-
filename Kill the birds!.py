@@ -11,10 +11,12 @@ import sys
 import random
 
 
-#The code is composed of several functions for windows like Menu(), how(),getback(), play() and classes for different objects
-#to maintain simplicity such as spaceship() for the player, birdS(), EGG(), Boss()
-#
-#
+#The code is composed of several functions for windows like Menu(): the main window that appears once you open the game, how():
+#how to play window, getback(): helper function for how() to return to main menu when "back" button is clicked
+#play(): which is the main pygame window for the whole game, the play contains all of the levels, main constants and functions like collision detection...etc
+
+#The game also consists of classes for different objects to maintain simplicity such as
+#spaceship(): for the player, birds(): class for birds, EGG(): class for eggs thrown by the the birds, Boss(): class for the leader bird
 
 
 
