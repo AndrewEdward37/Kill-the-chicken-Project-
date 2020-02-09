@@ -212,10 +212,9 @@ class birds(pygame.sprite.Sprite):
             if self.counter%4 == 0:
                 self.image = self.static
 
-        elif self.rect.x <= 0:
-            if self.rect.x < 920:
-                self.image = self.moving
-                self.counter = self.counter + 1
+        elif self.rect.x <= 0 and self.rect.x < 920:
+            self.image = self.moving
+            self.counter = self.counter + 1
                     
     def update(self):
         #if the bird is dead, move outside
