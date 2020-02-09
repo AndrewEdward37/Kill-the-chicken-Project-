@@ -23,7 +23,7 @@ import random
 #___________________________________________________________________________________________________________
 #MAIN MENU WINDOW
 
-def Menu():
+def menu():
 
     root = Tkinter.Tk()
     root.geometry("1024x768")
@@ -80,7 +80,7 @@ def how(close):
 #function to re-create a menu when "back" button is clicked
 def getback(x):
     x.destroy()
-    Menu()
+    menu()
 
 #___________________________________________________________________________________________________________
 
@@ -720,7 +720,7 @@ def play(close):
                         game_over_Text = pygame.font.SysFont('Arial Black', 20).render('GAME OVER', True, pygame.color.Color('White'))
                         screen.blit(game_over_Text,(0,0))
                         pygame.quit()
-                        Menu()
+                        menu()
                         
                 #------------------------------------------------------------------------
 
@@ -817,7 +817,7 @@ def play(close):
                         game_over_Text = pygame.font.SysFont('Arial Black', 20).render('GAME OVER', True, pygame.color.Color('White'))
                         screen.blit(game_over_Text,(0,0))
                         pygame.quit()
-                        Menu()
+                        menu()
                 
                 
 
@@ -830,7 +830,7 @@ def play(close):
                     pygame.display.update()
                     pygame.time.delay(4000)
                     pygame.quit()
-                    Menu()
+                    menu()
                     game_over = 1
 
                 #if it was level 4, then load the boss
@@ -896,4 +896,4 @@ def play(close):
 #___________________________________________________________________________________________________________
 #main function'
             
-Menu()
+menu()
