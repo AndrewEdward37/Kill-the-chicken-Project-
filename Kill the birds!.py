@@ -59,7 +59,7 @@ def how(close):
 
     #get background image and place it
     background = ImageTk.PhotoImage(Image.open("Images/menu_howtoplay.png"))
-    background_label = Tkinter.Label(root, image = Background)
+    background_label = Tkinter.Label(root, image = background)
     background_label.place(x=0,y=0,relwidth=1,relheight=1)
 
     #place the instructions image
@@ -69,7 +69,7 @@ def how(close):
     #HOW_TO_PLAYLabel = Tkinter.Label(root, image = HOW_TO_PLAY , borderwidth=0, width = 900, height = 600)
     #HOW_TO_PLAYLabel.photo = HOW_TO_PLAY
 
-    Back_Btn_Image = ImageTk.PhotoImage(Image.open("Images/button_back.png"))
+    back_btn_image = ImageTk.PhotoImage(Image.open("Images/button_back.png"))
     BackBtn = Tkinter.Button(root, image =Back_Btn_Image, borderwidth=0, command=lambda x=root:getback(x))
 
     #pack instructions label
