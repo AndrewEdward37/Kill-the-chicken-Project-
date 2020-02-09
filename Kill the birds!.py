@@ -30,7 +30,7 @@ def menu():
 
     #get background image and place it
     background = ImageTk.PhotoImage(Image.open("Images/menu_galaxy.png"))
-    background_label = Tkinter.Label(root, image = Background)
+    background_label = Tkinter.Label(root, image = background)
     background_label.place(x=0,y=0,relwidth=1,relheight=1)
 
     #Buttons, and they labels
