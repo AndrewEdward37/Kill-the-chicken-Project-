@@ -29,9 +29,9 @@ def menu():
     root.geometry("1024x768")
 
     #get background image and place it
-    Background = ImageTk.PhotoImage(Image.open("Images/menu_galaxy.png"))
-    BackgroundLabel = Tkinter.Label(root, image = Background)
-    BackgroundLabel.place(x=0,y=0,relwidth=1,relheight=1)
+    background = ImageTk.PhotoImage(Image.open("Images/menu_galaxy.png"))
+    background_label = Tkinter.Label(root, image = Background)
+    background_label.place(x=0,y=0,relwidth=1,relheight=1)
 
     #Buttons, and they labels
     play_Btn_Image = ImageTk.PhotoImage(Image.open("Images/button_play.png"))
@@ -58,9 +58,9 @@ def how(close):
     root.geometry("1024x768")
 
     #get background image and place it
-    Background = ImageTk.PhotoImage(Image.open("Images/menu_howtoplay.png"))
-    BackgroundLabel = Tkinter.Label(root, image = Background)
-    BackgroundLabel.place(x=0,y=0,relwidth=1,relheight=1)
+    background = ImageTk.PhotoImage(Image.open("Images/menu_howtoplay.png"))
+    background_label = Tkinter.Label(root, image = Background)
+    background_label.place(x=0,y=0,relwidth=1,relheight=1)
 
     #place the instructions image
     #HOW_TO_PLAY = Image.open("Images/howtoplay.png")
